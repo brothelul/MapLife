@@ -11,4 +11,8 @@ public enum AppType {
     private AppType(int seqNo){
         this.seqNo = seqNo;
     }
+
+    public int getSeqNo() {
+        return seqNo;
+    }
 }

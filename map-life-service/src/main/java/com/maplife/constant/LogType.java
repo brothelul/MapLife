@@ -10,4 +10,8 @@ public enum LogType {
     private LogType(int seqNo){
         this.seqNo = seqNo;
     }
+
+    public int getSeqNo() {
+        return seqNo;
+    }
 }
