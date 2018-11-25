@@ -12,6 +12,4 @@
         <module>map-life-api</module>
         <module>map-life-service</module>
     </modules>
-
-
 </project>

@@ -2,6 +2,8 @@ package com.maplife.web.handler;
 
 import com.maplife.web.util.JsonEntity;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public JsonEntity handle403(){
+        return new JsonEntity(null, 403, "无权限");
+    }
+
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public JsonEntity handle401(UnauthenticatedException e){
+        logger.error(e);
+        return new JsonEntity(null, 401, "未登录");
+    }
     /**
      * 内部错误异常
      * @param e

@@ -31,7 +31,7 @@ public class SysLog {
     private String outParams;
     private String exception;
     private String exceptionMsg;
-    private String token;
+    private String session;
     private String ipAddress;
     private Date startDatetime;
     private Date endDatetime;

@@ -1,4 +1,4 @@
-package com.maplife.framework.annotation;
+package com.maplife.web.framework.annotation;
 
 import com.maplife.constant.LogType;
 import com.maplife.constant.AppType;
