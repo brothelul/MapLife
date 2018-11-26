@@ -15,9 +15,11 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 @Configuration
 public class RedisCacheConfigurer extends CachingConfigurerSupport {
-    //缓存管理器
+    /**
+     * 缓存管理器
+     */
     @Bean
-    public CacheManager cacheManager(@SuppressWarnings("rawtypes") RedisTemplate redisTemplate) {
+    public CacheManager cacheManager( RedisTemplate redisTemplate) {
         RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
         //设置缓存过期时间
         cacheManager.setDefaultExpiration(10000);
@@ -26,7 +28,8 @@ public class RedisCacheConfigurer extends CachingConfigurerSupport {
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory){
         StringRedisTemplate template = new StringRedisTemplate(factory);
-        setSerializer(template);//设置序列化工具
+        //设置序列化工具
+        setSerializer(template);
         template.afterPropertiesSet();
         return template;
     }

@@ -18,6 +18,9 @@ public class JsonEntity<T> implements Serializable {
     public JsonEntity(T data){
         this.data = data;
     }
+    public JsonEntity(String message){
+        this.message = message;
+    }
     public JsonEntity(int status, String message){
         this.status = status;
         this.message = message;

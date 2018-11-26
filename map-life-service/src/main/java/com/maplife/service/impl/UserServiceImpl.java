@@ -2,6 +2,7 @@ package com.maplife.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.maplife.bo.WxUserBo;
 import com.maplife.entity.User;
 import com.maplife.mapper.UserMapper;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CachePut(key = "#p0")
-    public void updateUser(User user) {
-        userMapper.updateById(user);
+    public void updateUser(User user, Wrapper<User> updateFields) {
+        userMapper.update(user, updateFields);
     }
 }

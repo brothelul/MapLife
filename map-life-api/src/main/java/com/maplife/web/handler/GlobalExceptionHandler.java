@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public JsonEntity handle403(){

@@ -2,6 +2,7 @@ package com.maplife.web.framework.aspect;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.maplife.constant.SystemConstant;
 import com.maplife.entity.SysLog;
 import com.maplife.entity.User;
 import com.maplife.exception.ServiceException;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @auther mosesc
@@ -57,25 +60,23 @@ public class LogAspect {
         String exceptionMsg = null;
         // 初始化入参
         Object[] params = joinPoint.getArgs();
-        StringBuffer inParams = null;
+        Map<String, Object> inParamsMap = null;
         if (params != null && params.length > 0){
-            inParams = new StringBuffer();
+            inParamsMap = new HashMap<String, Object>(4);
             for (int i = 0; i < params.length; i++){
                 Object object = params[i];
+                String key = "arg" + i;
                 try {
-                    if (i > 0){
-                        inParams.append(",");
-                    }
                     if (object instanceof MultipartFile){
                         throw new CannotCaseException("文件对象不进行转换");
                     }
                     if (object instanceof  HttpServletRequest){
                         throw new CannotCaseException("Http请求不进行转换");
                     }
-                    inParams.append("arg"+i+"="+JSONObject.toJSON(object));
+                    inParamsMap.put(key, object);
                 } catch (Exception e){
                     logger.warn("转化对象"+params[i]+"成JSON字符串失败", e);
-                    inParams.append("arg"+i+"="+object.toString());
+                    inParamsMap.put(key, object.getClass().getName());
                 }
             }
         }
@@ -88,7 +89,7 @@ public class LogAspect {
             throw new ServiceException("处理请求失败", throwable);
         } finally {
             long endTime = System.currentTimeMillis();
-            SysLog sysLog = new SysLog(null, appId, logType, methodName, userId, requestUrl, inParams.toString(), JSONObject.toJSONString(data), exception, exceptionMsg,sessionId, ipAddress, new Date(startTime), new Date(endTime), -9999, new Date());
+            SysLog sysLog = new SysLog(null, appId, logType, methodName, userId, requestUrl, JSONObject.toJSONString(inParamsMap), JSONObject.toJSONString(data), exception, exceptionMsg,sessionId, ipAddress, new Date(startTime), new Date(endTime), SystemConstant.SYSTEM_ID, new Date());
             sysLogService.saveSysLog(sysLog);
         }
     }

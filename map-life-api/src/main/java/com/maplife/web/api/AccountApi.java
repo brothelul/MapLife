@@ -1,8 +1,10 @@
 package com.maplife.web.api;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.maplife.bo.TestUserBo;
 import com.maplife.bo.WxUserBo;
 import com.maplife.constant.LogType;
+import com.maplife.constant.SystemConstant;
 import com.maplife.entity.User;
 import com.maplife.service.UserService;
 import com.maplife.web.framework.annotation.Log;
@@ -31,9 +33,9 @@ public class AccountApi {
 
     @PostMapping(value = "/wx/login")
     @Log(action = LogType.LOGIN)
-    public JsonEntity<Map<String, String>> getWxAccessToken(@RequestBody WxUserBo wxUserBo, HttpServletRequest request){
+    public JsonEntity<Map<String, String>> wxLogin(@RequestBody WxUserBo wxUserBo, HttpServletRequest request){
         userLogin(wxUserBo);
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<String, String>(2);
         data.put("sessionId", request.getSession().getId());
         return ResponseHelper.createInstance(data);
     }
@@ -47,9 +49,9 @@ public class AccountApi {
 
     @PostMapping(value = "/wx/login/as")
     @Log(action = LogType.LOGIN)
-    public JsonEntity<Map<String, String>> getWxAccessToken(@RequestBody TestUserBo testUserBo, HttpServletRequest request){
+    public JsonEntity<Map<String, String>> wxLoginAs(@RequestBody TestUserBo testUserBo, HttpServletRequest request){
         userLoginAs(testUserBo);
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<String, String>(2);
         data.put("sessionId", request.getSession().getId());
         return ResponseHelper.createInstance(data);
     }
@@ -57,18 +59,29 @@ public class AccountApi {
     public void userLoginAs(TestUserBo testUserBo){
         String wxOpenId = testUserBo.getWxOpenId();
         User user = userService.findUserByWxOpenId(wxOpenId);
+        String nickName = testUserBo.getNickName();
+        String avatarUrl = testUserBo.getAvatarUrl();
         if (user == null){
             user = new User();
             user.setWxOpenId(wxOpenId);
-            user.setNickName(testUserBo.getNickName());
-            user.setAvatarUrl(testUserBo.getAvatarUrl());
-            user.setEntryId(-9999);
+            user.setNickName(nickName);
+            user.setAvatarUrl(avatarUrl);
+            user.setEntryId(SystemConstant.SYSTEM_ID);
             user.setEntryDatetime(new Date());
             userService.saveUser(user);
         } else {
-            user.setNickName(testUserBo.getNickName());
-            user.setAvatarUrl(testUserBo.getAvatarUrl());
-            userService.updateUser(user);
+            boolean nickNameSame = nickName != null && nickName.equals(user.getNickName());
+            boolean avatarSame = avatarUrl != null && avatarUrl.equals(user.getAvatarUrl());
+            if (!nickNameSame || !avatarSame){
+                UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<User>();
+                if (!nickNameSame){
+                    userUpdateWrapper.set("nick_name", nickName);
+                }
+                if (!avatarSame){
+                    userUpdateWrapper.set("avatar_url", avatarUrl);
+                }
+                userService.updateUser(user, userUpdateWrapper);
+            }
         }
         UsernamePasswordToken token = new UsernamePasswordToken(wxOpenId, (String)null);
         SecurityUtils.getSubject().login(token);
