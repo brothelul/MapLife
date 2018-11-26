@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://www.modutxt.xin:3306/map_life?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: mysql
+    url: jdbc:mysql://{url}:{port}/map_life?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
+    username: {username}
+    password: {password}
   application:
     name: maplife
   redis:
