@@ -1,11 +1,16 @@
 package com.maplife.service.impl;
 
 import com.maplife.bo.InputItemBo;
+import com.maplife.bo.InputItemContentBo;
+import com.maplife.bo.ItemContentBo;
+import com.maplife.constant.ContentType;
 import com.maplife.constant.SystemConstant;
 import com.maplife.entity.Item;
 import com.maplife.entity.ItemCategory;
+import com.maplife.entity.ItemContent;
 import com.maplife.exception.ServiceException;
 import com.maplife.mapper.ItemCategoryMapper;
+import com.maplife.mapper.ItemContentMapper;
 import com.maplife.mapper.ItemMapper;
 import com.maplife.service.ItemService;
 import com.maplife.util.DateUtil;
@@ -14,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @auther mosesc
@@ -27,9 +34,11 @@ public class ItemServiceImpl implements ItemService {
     private ItemMapper itemMapper;
     @Autowired
     private ItemCategoryMapper itemCategoryMapper;
+    @Autowired
+    private ItemContentMapper itemContentMapper;
 
     @Override
-    public Integer createItem(InputItemBo inputItemBo) {
+    public void createItem(InputItemBo inputItemBo) {
         Integer categoryId = inputItemBo.getCategoryId();
         String title = inputItemBo.getTitle();
         Date cuteOffDate = inputItemBo.getCuteOffDate();
@@ -49,6 +58,21 @@ public class ItemServiceImpl implements ItemService {
         item.setEntryId(SystemConstant.SYSTEM_ID);
         item.setEntryDatetime(new Date());
         Integer itemId = itemMapper.insert(item);
-        return null;
+        List<ItemContentBo> itemContent = inputItemBo.getItemContent();
+        if(inputItemBo.getItemContent() != null){
+            itemContent.forEach(itemContentBo -> {
+                String typeName = itemContentBo.getContentType();
+                if (ContentType.IMAGE.getName().equals(typeName) || ContentType.TEXT.getName().equals(typeName)){
+                    ItemContent content = new ItemContent();
+                    content.setItemId(itemId);
+                    content.setEntryId(SystemConstant.SYSTEM_ID);
+                    content.setEntryDatetime(new Date());
+                    content.setContent(itemContentBo.getContent());
+                    Integer contentType = ContentType.TEXT.getName().equals(typeName) ? ContentType.TEXT.getSeqNo() : ContentType.IMAGE.getSeqNo();
+                    content.setContentType(contentType);
+                    itemContentMapper.insert(content);
+                }
+            });
+        }
     }
 }

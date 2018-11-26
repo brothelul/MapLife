@@ -7,5 +7,5 @@ import com.maplife.bo.InputItemBo;
  * @date 11/26/18.
  */
 public interface ItemService {
-    Integer createItem(InputItemBo inputItemBo);
+    void createItem(InputItemBo inputItemBo);
 }
