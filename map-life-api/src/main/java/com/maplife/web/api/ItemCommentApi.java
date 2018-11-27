@@ -8,11 +8,7 @@ import com.maplife.web.util.JsonEntity;
 import com.maplife.web.util.ResponseHelper;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,5 +34,12 @@ public class ItemCommentApi {
         itemCommentBo.setUserId(webContext.getCurrentUser().getUserId());
         result.put("commentId", itemCommentService.createNewComment(itemCommentBo));
         return ResponseHelper.createInstance(result);
+    }
+
+    @DeleteMapping(value = "/item/comment/{commentId}")
+    public JsonEntity deleteComment(@PathVariable("commentId") Integer commentId){
+        Integer userId = webContext.getCurrentUser().getUserId();
+        itemCommentService.deleteComment(commentId, userId);
+        return ResponseHelper.createMessageInstance("删除成功");
     }
 }

@@ -8,4 +8,6 @@ import com.maplife.bo.ItemCommentBo;
  */
 public interface ItemCommentService {
     Integer createNewComment(ItemCommentBo itemCommentBo);
+
+    void deleteComment(Integer commentId, Integer userId);
 }
