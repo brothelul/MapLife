@@ -5,9 +5,9 @@ package com.maplife.constant;
  * @date 11/23/18.
  */
 public enum LogType {
-    COMMON(0),LOGIN(1);
+    COMMON(0),LOGIN(1),ITEM(2);
     private int seqNo;
-    private LogType(int seqNo){
+    LogType(int seqNo){
         this.seqNo = seqNo;
     }
 

@@ -9,7 +9,7 @@ public enum ContentType {
     private String name;
     private Integer seqNo;
 
-    private ContentType(String name, Integer seqNo){
+    ContentType(String name, Integer seqNo){
         this.name = name;
         this.seqNo = seqNo;
     }

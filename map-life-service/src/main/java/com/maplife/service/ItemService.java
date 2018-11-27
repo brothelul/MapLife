@@ -1,6 +1,7 @@
 package com.maplife.service;
 
 import com.maplife.bo.InputItemBo;
+import com.maplife.bo.OutputItemBo;
 
 /**
  * @auther mosesc
@@ -8,4 +9,8 @@ import com.maplife.bo.InputItemBo;
  */
 public interface ItemService {
     void createItem(InputItemBo inputItemBo);
+
+    void deleteItem(Integer itemId, Integer userId);
+
+    OutputItemBo getItem(Integer itemId);
 }

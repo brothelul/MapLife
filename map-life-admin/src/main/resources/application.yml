@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://www.modutxt.xin:3306/map_life?zeroDateTimeBehavior=convertToNull&verifyServerCertificate=false&useSSL=true&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: mysql
+  application:
+    name: maplife
+  redis:
+    host: localhost
+    port: 6397
+    pool:
+      max-active: 8
+
+server:
+  port: 8989
+
+swagger:
+  enable: true
+  title: Map Life
+  description: Map Life API Document
+  version: 1.0
+  url:
+  author:
+    name: Brother Lu
+    email: 1285823170@qq.com
+    url:
+
+threadPool:
+  name: maplife-amdin-async-thread
+  keepAlive: 5
+  allowCoreTimeOut: true
+  size:
+    max: 20
+    core: 3
+    capacity: 200

@@ -1,7 +1,6 @@
-package com.maplife.web.handler;
+package com.maplife.admin.handler;
 
-import com.maplife.exception.ResourceNotFoundException;
-import com.maplife.web.util.JsonEntity;
+import com.maplife.admin.util.JsonEntity;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -27,13 +26,6 @@ public class GlobalExceptionHandler {
     public JsonEntity handle401(UnauthenticatedException e){
         logger.error(e);
         return new JsonEntity(null, 401, "未登录");
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public JsonEntity handle404(ResourceNotFoundException e){
-        logger.error(e);
-        return new JsonEntity(null, 404, e.getMessage());
     }
     /**
      * 内部错误异常

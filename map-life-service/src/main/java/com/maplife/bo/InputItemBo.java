@@ -13,4 +13,5 @@ import java.util.List;
 @Data
 public class InputItemBo extends ItemBo {
     private Integer categoryId;
+    private Integer userId;
 }

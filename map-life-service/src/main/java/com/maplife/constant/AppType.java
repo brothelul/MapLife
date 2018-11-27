@@ -8,7 +8,7 @@ public enum AppType {
     ADMIN(0), MAP_LIFE(1);
     private int seqNo;
 
-    private AppType(int seqNo){
+    AppType(int seqNo){
         this.seqNo = seqNo;
     }
 
