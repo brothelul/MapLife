@@ -1,6 +1,5 @@
 package com.maplife.entity;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
@@ -9,16 +8,17 @@ import java.util.Date;
 
 /**
  * @auther mosesc
- * @date 11/26/18.
+ * @date 11/27/18.
  */
 @Data
-public class ItemCategory {
+public class ItemComment {
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer categoryId;
-    private String name;
-    private String description;
+    private Integer commentId;
+    private Integer itemId;
+    private Integer userId;
+    private Integer parentId;
+    private String content;
     private String imageUrl;
-    private Character active;
     private Integer entryId;
     private Date entryDatetime;
     private Integer deleteId;

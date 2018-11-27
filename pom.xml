@@ -11,5 +11,6 @@
     <modules>
         <module>map-life-api</module>
         <module>map-life-service</module>
+        <module>map-life-admin</module>
     </modules>
 </project>

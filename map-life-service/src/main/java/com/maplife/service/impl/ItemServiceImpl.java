@@ -20,10 +20,12 @@ import com.maplife.mapper.ItemContentMapper;
 import com.maplife.mapper.ItemMapper;
 import com.maplife.mapper.UserMapper;
 import com.maplife.service.ItemService;
+import com.maplife.util.ContentTypeConvertUtil;
 import com.maplife.util.DateUtil;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -65,6 +67,7 @@ public class ItemServiceImpl implements ItemService {
         cuteOffDate = cuteOffDate == null ? DateUtil.getDateAfterAdd(Calendar.DAY_OF_YEAR, SystemConstant.DEFAULT_CUTE_OFF_DAY) : cuteOffDate;
         Item item = new Item();
         BeanUtils.copyProperties(inputItemBo, item);
+        item.setCuteOffDate(cuteOffDate);
         item.setEntryId(SystemConstant.SYSTEM_ID);
         item.setEntryDatetime(new Date());
         itemMapper.insert(item);
@@ -73,17 +76,14 @@ public class ItemServiceImpl implements ItemService {
         if(inputItemBo.getItemContent() != null){
             itemContent.forEach(itemContentBo -> {
                 String typeName = itemContentBo.getContentType();
-                if (ContentType.IMAGE.getName().equals(typeName) || ContentType.TEXT.getName().equals(typeName)){
-                    ItemContent content = new ItemContent();
-                    content.setItemId(itemId);
-                    content.setSeqNo(itemContentBo.getSeqNo());
-                    content.setEntryId(SystemConstant.SYSTEM_ID);
-                    content.setEntryDatetime(new Date());
-                    content.setContent(itemContentBo.getContent());
-                    Integer contentType = ContentType.TEXT.getName().equals(typeName) ? ContentType.TEXT.getSeqNo() : ContentType.IMAGE.getSeqNo();
-                    content.setContentType(contentType);
-                    itemContentMapper.insert(content);
-                }
+                ItemContent content = new ItemContent();
+                content.setItemId(itemId);
+                content.setSeqNo(itemContentBo.getSeqNo());
+                content.setEntryId(SystemConstant.SYSTEM_ID);
+                content.setEntryDatetime(new Date());
+                content.setContent(itemContentBo.getContent());
+                content.setContentType(ContentTypeConvertUtil.typeTxt2TypeNo(typeName));
+                itemContentMapper.insert(content);
             });
         }
     }
@@ -123,6 +123,7 @@ public class ItemServiceImpl implements ItemService {
             itemContents.forEach(itemContent -> {
                 ItemContentBo itemContentBo = new ItemContentBo();
                 BeanUtils.copyProperties(itemContent, itemContentBo);
+                itemContentBo.setContentType(ContentTypeConvertUtil.typeNo2TypeTxt(itemContent.getContentType()));
                 itemContentBos.add(itemContentBo);
             });
             outputItemBo.setItemContent(itemContentBos);
@@ -137,6 +138,13 @@ public class ItemServiceImpl implements ItemService {
         ItemCategoryBo categoryBo = new ItemCategoryBo();
         BeanUtils.copyProperties(category, categoryBo);
         outputItemBo.setItemCategory(categoryBo);
+        // 统计浏览量
+        viewCountAdd(itemId);
         return outputItemBo;
+    }
+
+    @Async
+    private void viewCountAdd(Integer itemId) {
+        itemMapper.addViewCount(itemId);
     }
 }

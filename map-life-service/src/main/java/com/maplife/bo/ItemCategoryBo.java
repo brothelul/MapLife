@@ -9,4 +9,8 @@ import lombok.Data;
 @Data
 public class ItemCategoryBo {
     private Integer categoryId;
+    private String name;
+    private String description;
+    private String imageUrl;
+    private Character active;
 }
