@@ -1,6 +1,9 @@
 package com.maplife.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.maplife.bo.ItemCommentBo;
+import com.maplife.bo.OutputItemCommentBo;
+import com.maplife.bo.PageQueryBo;
 
 /**
  * @auther mosesc
@@ -8,6 +11,8 @@ import com.maplife.bo.ItemCommentBo;
  */
 public interface ItemCommentService {
     Integer createNewComment(ItemCommentBo itemCommentBo);
+
+    Page<OutputItemCommentBo> listComment(PageQueryBo pageQueryBo);
 
     void deleteComment(Integer commentId, Integer userId);
 }

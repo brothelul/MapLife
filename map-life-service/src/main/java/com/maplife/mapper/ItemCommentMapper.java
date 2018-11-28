@@ -1,6 +1,8 @@
 package com.maplife.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.maplife.entity.ItemComment;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
