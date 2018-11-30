@@ -36,7 +36,8 @@ public class ItemLikeServiceImpl implements ItemLikeService {
     public void addNewLike(InputItemLikeBo inputItemLike) {
         Integer typeNo = inputItemLike.getLikeType();
         Integer targetNo = inputItemLike.getTargetId();
-        if (typeNo == null || (!typeNo.equals(0) && !typeNo.equals(1))){
+        boolean typeNoExistCondition = (typeNo == null || (!typeNo.equals(0) && !typeNo.equals(1)));
+        if (typeNoExistCondition){
             inputItemLike.setLikeType(0);
         }
         if (targetNo == null){
